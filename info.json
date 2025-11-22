@@ -1,0 +1,9 @@
+{
+	"Id": "DerailValleyWebSocket",
+	"Version": "1.0.0",
+	"DisplayName": "DerailValleyWebSocket",
+	"Author": "Jared Williams",
+	"EntryMethod": "DerailValleyWebSocket.Main.Load",
+	"ManagerVersion": "0.32.4",
+	"Repository": "https://raw.githubusercontent.com/imagitama/derail-valley-websocket/main/repository.json"
+}
