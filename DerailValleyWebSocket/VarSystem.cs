@@ -163,9 +163,6 @@ public static class VarSystem
 
             object? val = Fetch(cv);
 
-            if (val == null)
-                throw new Exception("Fetch result is null");
-
             result[kv.Key] = val;
         }
 
