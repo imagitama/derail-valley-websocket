@@ -21,8 +21,14 @@ public class WebsocketServer
         {
             var behavior = new WsBehavior();
             behavior.OnMessageReceived = HandleMessage;
-            behavior.OnClientConnected = id => _clients[id] = new ClientSession(id);
-            behavior.OnClientDisconnected = id => _clients.Remove(id);
+            behavior.OnClientConnected = id => {
+                Main.Logger.Logger.Log($"Client {id} connected");
+                _clients[id] = new ClientSession(id);
+            };
+            behavior.OnClientDisconnected = id => {
+                Main.Logger.Logger.Log($"Client {id} disconnected");
+                _clients.Remove(id);
+            };
             return behavior;
         });
     }

@@ -33,4 +33,14 @@ public class UpdateDriver : MonoBehaviour
             Main.Logger.Logger.Log($"UpdateDriver failed: {ex}");
         }
     }
+
+    private void OnDisable()
+    {
+        Main.Logger.Logger.Log($"UpdateDriver disabled");
+    }
+
+    private void OnDestroy()
+    {
+        Main.Logger.Logger.Log($"UpdateDriver destroyed");
+    }
 }

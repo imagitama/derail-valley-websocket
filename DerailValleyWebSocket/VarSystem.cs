@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 
 namespace DerailValleyWebSocket;
 
@@ -153,8 +154,9 @@ public static class VarSystem
     public static Dictionary<(string, string), object> FetchAll()
     {
         var result = new Dictionary<(string, string), object>();
+        var snapshot = ActiveVars.ToList();
 
-        foreach (var kv in ActiveVars)
+        foreach (var kv in snapshot)
         {
             var cv = kv.Value;
 

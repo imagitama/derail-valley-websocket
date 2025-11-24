@@ -21,21 +21,12 @@ public static class Main
             harmony = new Harmony(modEntry.Info.Id);
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-            var go = new GameObject("DerailValleyWebSocket_Update");
+            var go = new GameObject("DerailValleyWebSocket_UpdateDriver");
             UnityEngine.Object.DontDestroyOnLoad(go);
             go.AddComponent<UpdateDriver>();
 
             Server = new WebsocketServer(9450);
             Server.Start();
-            
-            PlayerManager.CarChanged += OnCarChanged;
-
-            if (PlayerManager.Car == null)
-                Logger.Logger.Log($"DerailValleyWebSocket initial car is nothing");
-            else
-                Logger.Logger.Log($"DerailValleyWebSocket initial car is '{CarHelper.GetCurrentCarName()}'");
-
-            OnCarChanged(PlayerManager.Car);
 
             Logger.Logger.Log("DerailValleyWebSocket started");
         }
@@ -48,23 +39,6 @@ public static class Main
 
         modEntry.OnUnload = Unload;
         return true;
-    }
-
-    private static void OnCarChanged(TrainCar newCar)
-    {
-        if (newCar == null)
-        {
-            Logger.Logger.Log($"DerailValleyWebSocket car changed => null");
-
-            Main.Server.BroadcastEvent("CAR_NAME_CHANGED", null);
-            return;
-        }
-
-        var newName = CarHelper.GetCurrentCarName();
-
-        Logger.Logger.Log($"DerailValleyWebSocket car changed => '{newName}'");
-
-        Main.Server.BroadcastEvent("CAR_NAME_CHANGED", newName);
     }
 
     private static bool Unload(UnityModManager.ModEntry entry)

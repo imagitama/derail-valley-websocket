@@ -29,12 +29,18 @@ public static class CarHelper
         if (valueFromUi != null)
             return valueFromUi;
 
+        if (PlayerManager.Car?.SimController?.SimulationFlow == null)
+            return null;
+
         float? speedKph = null;
 
         var simController = PlayerManager.Car.SimController;
         var simulationFlow = simController.SimulationFlow;
 
         var tractionPortsFeeder = simController.tractionPortsFeeder;
+
+        if (tractionPortsFeeder == null)
+            return null;
 
         var portId = tractionPortsFeeder.forwardSpeedPortId;
 
