@@ -4,6 +4,14 @@ A mod for the game Derail Valley that starts a WebSocket server to expose data f
 
 Template from https://github.com/derail-valley-modding/template-umm
 
+## Settings
+
+Configure using UMM:
+
+| Name | Type  | Default | Description     |
+| ---- | ----- | ------- | --------------- |
+| Port | `int` | 9450    | WebSocket port. |
+
 ## Messages
 
 See `DerailValleyWebSocket/Messages.cs` for all messages.

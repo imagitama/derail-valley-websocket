@@ -10,6 +10,7 @@ public static class Main
 {
     public static UnityModManager.ModEntry Logger;
     public static WebsocketServer Server;
+    public static Settings Settings;
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
@@ -18,6 +19,11 @@ public static class Main
         Harmony? harmony = null;
         try
         {
+            Settings = Settings.Load<Settings>(modEntry);
+
+            modEntry.OnGUI = OnGUI;
+            modEntry.OnSaveGUI = OnSaveGUI;
+
             harmony = new Harmony(modEntry.Info.Id);
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
@@ -25,7 +31,8 @@ public static class Main
             UnityEngine.Object.DontDestroyOnLoad(go);
             go.AddComponent<UpdateDriver>();
 
-            Server = new WebsocketServer(9450);
+            // TODO: restart on port change
+            Server = new WebsocketServer(Settings.Port);
             Server.Start();
 
             Logger.Logger.Log("DerailValleyWebSocket started");
@@ -39,6 +46,20 @@ public static class Main
 
         modEntry.OnUnload = Unload;
         return true;
+    }
+
+    private static void OnGUI(UnityModManager.ModEntry modEntry)
+    {
+        GUILayout.Label("Mod Settings", UnityEngine.GUI.skin.label);
+
+        Settings.Port = int.Parse(
+            GUILayout.TextField(Settings.Port.ToString())
+        );
+    }
+
+    private static void OnSaveGUI(UnityModManager.ModEntry modEntry)
+    {
+        Settings.Save(modEntry);
     }
 
     private static bool Unload(UnityModManager.ModEntry entry)

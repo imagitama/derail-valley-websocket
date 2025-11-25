@@ -16,6 +16,7 @@ public class WebsocketServer
 
     public WebsocketServer(int port)
     {
+        Main.Logger.Logger.Log($"Start WebSocket server on port {port}");
         _server = new WebSocketServer(port);
         _server.AddWebSocketService<WsBehavior>("/dv", () =>
         {
