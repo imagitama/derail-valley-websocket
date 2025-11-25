@@ -1,3 +1,7 @@
+# 1.0.3
+
+- add car type into name
+
 # 1.0.2
 
 - fixed emit pausing on loading a new game

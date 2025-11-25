@@ -13,7 +13,7 @@ public static class CarHelper
         if (PlayerManager.Car == null)
             return null;
 
-        return PlayerManager.Car.carLivery.parentType.id;
+        return $"{PlayerManager.Car.carType} {PlayerManager.Car.carLivery.parentType.id}";
     }
 
     public static float? CarSpeedometerValueKphFromUi()

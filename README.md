@@ -27,6 +27,19 @@ Var name casing doesn't matter.
 | ------------------ | --------- | ----------- | ------------------------------------------------------------------------------ |
 | `CAR_NAME_CHANGED` | `string?` | `"LocoDE2"` | The name of the player's train car has changed.<br />Null if not inside a car. |
 
+### Car names
+
+Any train car you can stand on including locomotives, flatbeds, tanks, etc.
+
+Determined from `$type $parentType` (enum `TrainCarType` and `TrainCarLivery.id`).
+
+| Name            | CarName                |
+| --------------- | ---------------------- |
+| DE2             | `LocoShunter LocoDE2`  |
+| Flatbed         | `FlatbedEmpty Flatbed` |
+| Blue Tank       | `TankBlue TankGas`     |
+| Yellow Oil Tank | `TankYellow TankOil`   |
+
 ## Install
 
 Download the zip and use Unity Mod Manager to install it.
