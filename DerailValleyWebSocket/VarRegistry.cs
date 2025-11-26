@@ -49,5 +49,13 @@ public static class VarRegistry
                 "CarHelper",
                 "GetCarSpeedometerValueKph"
             ),
+
+            [("throttle", "position")] = new VarDescriptor(
+                "throttle",
+                "position", // float 0 -> 1
+                "DerailValleyWebSocket",
+                "CarHelper",
+                "GetCarThrottleLeverPosition"
+            )
         };
 }

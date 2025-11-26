@@ -16,19 +16,14 @@ public static class CarHelper
         return $"{PlayerManager.Car.carType} {PlayerManager.Car.carLivery.parentType.id}";
     }
 
-    public static float? CarSpeedometerValueKphFromUi()
+    public static float? GetCarSpeedometerValueKphFromUi()
     {
         var speed = SingletonBehaviour<HUDInterfacer>.Instance?.controlsManager?.indicatorReader?.speed?.Value;
         return speed;
     }
-
-    public static float? GetCarSpeedometerValueKph()
+    
+    public static float? GetCarSpeedometerValueKphFromSim()
     {
-        var valueFromUi = CarSpeedometerValueKphFromUi();
-
-        if (valueFromUi != null)
-            return valueFromUi;
-
         if (PlayerManager.Car?.SimController?.SimulationFlow == null)
             return null;
 
@@ -49,11 +44,34 @@ public static class CarHelper
             var speed = port.Value;
             speedKph = Mathf.Abs(speed);
         }
-        else if (PlayerManager.Car != null)
-        {
-            speedKph = PlayerManager.Car.GetAbsSpeed() * 3.6f;
-        }
-            
+
         return speedKph;
+    }
+
+    public static float? GetCarSpeedometerValueKph()
+    {
+        var valueFromUi = GetCarSpeedometerValueKphFromUi();
+
+        if (valueFromUi != null)
+            return valueFromUi;
+
+        var valueFromSim = GetCarSpeedometerValueKphFromSim();
+
+        if (valueFromSim != null)
+            return valueFromSim;
+
+        if (PlayerManager.Car != null)
+            return PlayerManager.Car.GetAbsSpeed() * 3.6f;
+            
+        return null;
+    }
+
+    public static float? GetCarThrottleLeverPosition()
+    {
+        // TODO: fallback to ports (need to find correct one)
+
+        // 0 to 1 at consistent increments
+        var throttleLeverPosition = SingletonBehaviour<HUDInterfacer>.Instance?.baseControls?.GetValue(InteriorControlsManager.ControlType.Throttle);
+        return throttleLeverPosition;
     }
 }
