@@ -29,6 +29,7 @@ Var name casing doesn't matter.
 | `CAR_SPEED`       | `kph`      | `float?` | `123.45` | The actual speed of the player's train car.<br />Null if not in a train car.                       |
 | `CAR_SPEEDOMETER` | `kph`      | `float?` | `123.45` | The speed displayed on the speedometer in the player's train car.<br />Null if not in a train car. |
 | `THROTTLE`        | `position` | `float?` | `0.363`  | The position of the throttle lever from 0 to 100%.                                                 |
+| `TRAIN_BRAKE`     | `position` | `float?` | `0.363`  | The position of the train brake lever from 0 to 100%.                                              |
 
 ## Events
 

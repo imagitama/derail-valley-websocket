@@ -56,6 +56,14 @@ public static class VarRegistry
                 "DerailValleyWebSocket",
                 "CarHelper",
                 "GetCarThrottleLeverPosition"
+            ),
+            
+            [("train_brake", "position")] = new VarDescriptor(
+                "train_brake",
+                "position", // float 0 -> 1
+                "DerailValleyWebSocket",
+                "CarHelper",
+                "GetCarTrainBrakeLeverPosition"
             )
         };
 }

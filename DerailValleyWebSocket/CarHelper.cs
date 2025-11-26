@@ -71,7 +71,16 @@ public static class CarHelper
         // TODO: fallback to ports (need to find correct one)
 
         // 0 to 1 at consistent increments
-        var throttleLeverPosition = SingletonBehaviour<HUDInterfacer>.Instance?.baseControls?.GetValue(InteriorControlsManager.ControlType.Throttle);
-        return throttleLeverPosition;
+        var leverPosition = SingletonBehaviour<HUDInterfacer>.Instance?.baseControls?.GetValue(InteriorControlsManager.ControlType.Throttle);
+        return leverPosition;
+    }
+
+    public static float? GetCarTrainBrakeLeverPosition()
+    {
+        // TODO: fallback to ports (need to find correct one)
+
+        // 0 to 1 at consistent increments
+        var leverPosition = SingletonBehaviour<HUDInterfacer>.Instance?.baseControls?.GetValue(InteriorControlsManager.ControlType.TrainBrake);
+        return leverPosition;
     }
 }

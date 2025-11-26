@@ -1,3 +1,11 @@
+# 1.2.0
+
+- added var `train_brake` (`position`)
+
+# 1.1.0
+
+- added var `throttle` (`position`)
+
 # 1.0.3
 
 - add car type into name
