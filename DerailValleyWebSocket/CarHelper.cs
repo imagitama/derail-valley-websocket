@@ -1,7 +1,6 @@
 using DV.HUD;
 using DV.Utils;
 using DV.Customization;
-using DV.Customization.Gadgets;
 using UnityEngine;
 
 namespace DerailValleyWebSocket;
@@ -21,7 +20,7 @@ public static class CarHelper
         var speed = SingletonBehaviour<HUDInterfacer>.Instance?.controlsManager?.indicatorReader?.speed?.Value;
         return speed;
     }
-    
+
     public static float? GetCarSpeedometerValueKphFromSim()
     {
         if (PlayerManager.Car?.SimController?.SimulationFlow == null)
@@ -62,7 +61,7 @@ public static class CarHelper
 
         if (PlayerManager.Car != null)
             return PlayerManager.Car.GetAbsSpeed() * 3.6f;
-            
+
         return null;
     }
 
@@ -70,7 +69,7 @@ public static class CarHelper
     {
         // TODO: fallback to ports (need to find correct one)
 
-        // 0 to 1 at consistent increments
+        // 0 to 1 (at consistent increments on keyboard)
         var leverPosition = SingletonBehaviour<HUDInterfacer>.Instance?.baseControls?.GetValue(InteriorControlsManager.ControlType.Throttle);
         return leverPosition;
     }
@@ -79,8 +78,31 @@ public static class CarHelper
     {
         // TODO: fallback to ports (need to find correct one)
 
-        // 0 to 1 at consistent increments
+        // 0 to 1 (at consistent increments on keyboard)
         var leverPosition = SingletonBehaviour<HUDInterfacer>.Instance?.baseControls?.GetValue(InteriorControlsManager.ControlType.TrainBrake);
         return leverPosition;
+    }
+
+    public static float? GetCarTrainReverserLeverPosition()
+    {
+        // TODO: fallback to ports (need to find correct one)
+
+        // 0 to 1 (at consistent increments on keyboard)
+        var leverPosition = SingletonBehaviour<HUDInterfacer>.Instance?.baseControls?.GetValue(InteriorControlsManager.ControlType.Reverser);
+        return leverPosition;
+    }
+
+    public static float? GetCarStandardPortValue(STDSimPort port)
+    {
+        if (PlayerManager.Car == null)
+            return null;
+
+        var customComp = PlayerManager.Car.GetComponent<TrainCarCustomization>();
+
+        // TODO: work out how to use TryReadPort
+        if (customComp == null || !customComp.HasPort(port))
+            return null;
+
+        return customComp.ReadPort(port);
     }
 }

@@ -15,6 +15,7 @@ public class CompiledVar
     public string Namespace;
     public string TargetPath;
     public string Member;
+    public object[] Args;
     public Func<object, object> Converter;
 }
 
@@ -27,7 +28,7 @@ public static class VarSystem
         var key = GetKey(varName, unit);
 
         if (!VarRegistry.Vars.TryGetValue(key, out var varDescriptor))
-            throw new Exception($"Var '{varName}' ({unit}) not in registry");
+            throw new Exception($"Var '{varName}' ({unit}) not in registry ({string.Join(",", VarRegistry.Vars.Keys.Select(x => $"{x.VarName} ({x.Unit})"))})");
 
         var compiledVar = BuildCompiledVar(varDescriptor);
 
@@ -42,7 +43,8 @@ public static class VarSystem
     private static CompiledVar BuildCompiledVar(VarDescriptor desc)
     {
         object target = ResolveTargetInstance(desc.Namespace, desc.TargetPath);
-        var getter = BuildGetterDelegate(target, desc.Member);
+        var args = desc.Args ?? [];
+        var getter = BuildGetterDelegate(target, desc.Member, args);
 
         return new CompiledVar
         {
@@ -54,6 +56,7 @@ public static class VarSystem
             Namespace = desc.Namespace,
             TargetPath = desc.TargetPath,
             Member = desc.Member,
+            Args = args,
             Converter = desc.Converter
         };
     }
@@ -113,7 +116,7 @@ public static class VarSystem
         return current;
     }
 
-    private static Func<object?> BuildGetterDelegate(object target, string member)
+    private static Func<object?> BuildGetterDelegate(object target, string member, object[] args)
     {
         var type = target as Type ?? target.GetType();
 
@@ -125,7 +128,7 @@ public static class VarSystem
         var method = type.GetMethod(member,
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
         if (method != null)
-            return () => method.Invoke(target is Type ? null : target, null);
+            return () => method.Invoke(target is Type ? null : target, args);
 
         throw new Exception($"Failed to build getter delegate target={target} member={member}");
     }
@@ -138,7 +141,7 @@ public static class VarSystem
             if (cv.TargetInstance == null)
                 throw new Exception($"Target instance is null path={cv.TargetPath}");
 
-            cv.Getter = BuildGetterDelegate(cv.TargetInstance, cv.Member);
+            cv.Getter = BuildGetterDelegate(cv.TargetInstance, cv.Member, cv.Args);
             if (cv.Getter == null)
                 throw new Exception($"Getter delegate is null");
         }
@@ -147,7 +150,7 @@ public static class VarSystem
 
         if (cv.Converter != null)
             return cv.Converter(result);
-        
+
         return result;
     }
 

@@ -1,11 +1,13 @@
 using WebSocketSharp;
 using WebSocketSharp.Server;
 using System;
+using UnityModManagerNet;
 
 namespace DerailValleyWebSocket;
 
 public class WsBehavior : WebSocketBehavior
 {
+    private static UnityModManager.ModEntry.ModLogger Logger => Main.ModEntry.Logger;
     public Action<string>? OnClientConnected;
     public Action<string>? OnClientDisconnected;
     public Action<string, string>? OnMessageReceived;
@@ -18,7 +20,7 @@ public class WsBehavior : WebSocketBehavior
         }
         catch (Exception ex)
         {
-            Main.Logger.Logger.Log($"WsBehavior OnOpen exception: {ex}");
+            Logger.Log($"WsBehavior OnOpen exception: {ex}");
         }
     }
 
@@ -33,7 +35,7 @@ public class WsBehavior : WebSocketBehavior
         }
         catch (Exception ex)
         {
-            Main.Logger.Logger.Log($"WsBehavior OnMessage exception: {ex}");
+            Logger.Log($"WsBehavior OnMessage exception: {ex}");
             Sessions.CloseSession(ID, CloseStatusCode.ServerError, ex.Message);
         }
     }
@@ -46,12 +48,12 @@ public class WsBehavior : WebSocketBehavior
         }
         catch (Exception ex)
         {
-            Main.Logger.Logger.Log($"WsBehavior OnClose exception: {ex}");
+            Logger.Log($"WsBehavior OnClose exception: {ex}");
         }
     }
 
     protected override void OnError(ErrorEventArgs e)
     {
-        Main.Logger.Logger.Log($"WsBehavior OnError ({ID}): {e.Message}");
+        Logger.Log($"WsBehavior OnError ({ID}): {e.Message}");
     }
 }

@@ -1,16 +1,15 @@
 using UnityEngine;
 using System;
-
-using DV.HUD;
-using UnityEngine;
+using UnityModManagerNet;
 
 namespace DerailValleyWebSocket;
 
 public class UpdateDriver : MonoBehaviour
 {
+    private static UnityModManager.ModEntry.ModLogger Logger => Main.ModEntry.Logger;
     void Start()
     {
-        Main.Logger.Logger.Log($"UpdateDriver started");
+        Logger.Log($"UpdateDriver started");
     }
 
     void Update()
@@ -23,24 +22,25 @@ public class UpdateDriver : MonoBehaviour
             {
                 var (VarName, Unit) = kv.Key;
 
-                // Main.Logger.Logger.Log($"Fetch varName={VarName} unit={Unit} value={kv.Value}");
+                // Logger.Log($"Fetch varName={VarName} unit={Unit} value={kv.Value}");
 
+                // TODO: broadcast ALL vars once for performance
                 Main.Server.BroadcastVar(VarName, Unit, kv.Value);
             }
         }
         catch (Exception ex)
         {
-            Main.Logger.Logger.Log($"UpdateDriver failed: {ex}");
+            Logger.Log($"UpdateDriver failed: {ex}");
         }
     }
 
     private void OnDisable()
     {
-        Main.Logger.Logger.Log($"UpdateDriver disabled");
+        Logger.Log($"UpdateDriver disabled");
     }
 
     private void OnDestroy()
     {
-        Main.Logger.Logger.Log($"UpdateDriver destroyed");
+        Logger.Log($"UpdateDriver destroyed");
     }
 }

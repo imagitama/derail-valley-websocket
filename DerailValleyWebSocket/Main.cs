@@ -6,15 +6,18 @@ using UnityEngine;
 
 namespace DerailValleyWebSocket;
 
+#if DEBUG
+[EnableReloading]
+#endif
 public static class Main
 {
-    public static UnityModManager.ModEntry Logger;
+    public static UnityModManager.ModEntry ModEntry;
     public static WebsocketServer Server;
     public static Settings Settings;
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
-        Logger = modEntry;
+        ModEntry = modEntry;
 
         Harmony? harmony = null;
         try
@@ -35,7 +38,7 @@ public static class Main
             Server = new WebsocketServer(Settings.Port);
             Server.Start();
 
-            Logger.Logger.Log("DerailValleyWebSocket started");
+            ModEntry.Logger.Log("DerailValleyWebSocket started");
         }
         catch (Exception ex)
         {
@@ -65,7 +68,7 @@ public static class Main
     private static bool Unload(UnityModManager.ModEntry entry)
     {
         Server?.Stop();
-        Logger.Logger.Log("DerailValleyWebSocket stopped");
+        ModEntry.Logger.Log("DerailValleyWebSocket stopped");
         return true;
     }
 }

@@ -1,7 +1,7 @@
 {
 	"Id": "DerailValleyWebSocket",
-	"Version": "1.2.0",
-	"DisplayName": "DerailValleyWebSocket",
+	"Version": "1.3.0",
+	"DisplayName": "WebSocket",
 	"Author": "Jared Williams",
 	"EntryMethod": "DerailValleyWebSocket.Main.Load",
 	"ManagerVersion": "0.32.4",

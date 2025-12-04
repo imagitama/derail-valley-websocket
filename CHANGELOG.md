@@ -1,3 +1,10 @@
+# 1.3.0
+
+- added standard simport support:\
+   var: `port_EngineRPM`\
+   unit: `number`
+- renamed display name
+
 # 1.2.0
 
 - added var `train_brake` (`position`)

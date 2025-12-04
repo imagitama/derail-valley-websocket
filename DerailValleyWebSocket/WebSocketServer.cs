@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using UnityModManagerNet;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -10,24 +11,26 @@ namespace DerailValleyWebSocket;
 
 public class WebsocketServer
 {
+    private static UnityModManager.ModEntry.ModLogger Logger => Main.ModEntry.Logger;
     private WebSocketServer _server;
-
     private readonly Dictionary<string, ClientSession> _clients = new();
 
     public WebsocketServer(int port)
     {
-        Main.Logger.Logger.Log($"Start WebSocket server on port {port}");
+        Logger.Log($"Start WebSocket server on port {port}");
         _server = new WebSocketServer(port);
         _server.AddWebSocketService<WsBehavior>("/dv", () =>
         {
             var behavior = new WsBehavior();
             behavior.OnMessageReceived = HandleMessage;
-            behavior.OnClientConnected = id => {
-                Main.Logger.Logger.Log($"Client {id} connected");
+            behavior.OnClientConnected = id =>
+            {
+                Logger.Log($"Client {id} connected");
                 _clients[id] = new ClientSession(id);
             };
-            behavior.OnClientDisconnected = id => {
-                Main.Logger.Logger.Log($"Client {id} disconnected");
+            behavior.OnClientDisconnected = id =>
+            {
+                Logger.Log($"Client {id} disconnected");
                 _clients.Remove(id);
             };
             return behavior;
@@ -37,18 +40,19 @@ public class WebsocketServer
     public void Start()
     {
         _server.Start();
-        Main.Logger.Logger.Log("WebSocket server started");
+        Logger.Log("WebSocket server started");
     }
 
     public void Stop()
     {
         _server.Stop();
-        Main.Logger.Logger.Log("WebSocket server stopped");
+        Logger.Log("WebSocket server stopped");
     }
 
     private void HandleMessage(string clientId, string json)
     {
-        try {
+        try
+        {
             var message = JsonConvert.DeserializeObject<Message<JObject>>(json);
 
             if (message == null)
@@ -61,14 +65,15 @@ public class WebsocketServer
                         JsonConvert.SerializeObject(message.Payload)
                     );
 
-                    Main.Logger.Logger.Log($"Initialize message from client");
+                    Logger.Log($"Initialize message from client");
 
                     _clients[clientId].SubscribedVars = new HashSet<(string, string)>();
 
                     // TODO: Only do this if names don't match
                     Broadcast<InitPayload>(
                         MessageType.Init,
-                        new InitPayload {
+                        new InitPayload
+                        {
                             CarName = CarHelper.GetCurrentCarName()
                         }
                     );
@@ -79,7 +84,7 @@ public class WebsocketServer
                         JsonConvert.SerializeObject(message.Payload)
                     );
 
-                    Main.Logger.Logger.Log($"Client wants to subscribe to var '{subscribeToVarPayload!.Name}' ({subscribeToVarPayload!.Unit})");
+                    Logger.Log($"Client wants to subscribe to var '{subscribeToVarPayload!.Name}' ({subscribeToVarPayload!.Unit})");
 
                     _clients[clientId].SubscribedVars.Add((subscribeToVarPayload!.Name, subscribeToVarPayload!.Unit));
 
@@ -91,7 +96,7 @@ public class WebsocketServer
                         JsonConvert.SerializeObject(message.Payload)
                     );
 
-                    Main.Logger.Logger.Log($"Client wants to subscribe to event '{subscribeToEventPayload!.Name}'");
+                    Logger.Log($"Client wants to subscribe to event '{subscribeToEventPayload!.Name}'");
 
                     _clients[clientId].SubscribedEvents.Add(subscribeToEventPayload!.Name);
                     break;
@@ -102,14 +107,15 @@ public class WebsocketServer
         }
         catch (Exception ex)
         {
-                Main.Logger.Logger.Log($"Failed to handle message: {ex}");
+            Logger.Log($"Failed to handle message: {ex}");
 
-                Broadcast<ErrorPayload>(
-                    MessageType.Error,
-                    new ErrorPayload {
-                        Message = ex.Message
-                    }
-                );
+            Broadcast<ErrorPayload>(
+                MessageType.Error,
+                new ErrorPayload
+                {
+                    Message = ex.Message
+                }
+            );
         }
     }
 
@@ -127,7 +133,8 @@ public class WebsocketServer
     {
         string json = "";
 
-        try {
+        try
+        {
             var message = new Message<TPayload> { Type = type, Payload = payload };
 
             var settings = new JsonSerializerSettings
@@ -144,7 +151,7 @@ public class WebsocketServer
         }
         catch (Exception ex)
         {
-            Main.Logger.Logger.Log($"Failed to broadcast: {ex} json={json}");
+            Logger.Log($"Failed to broadcast: {ex} json={json}");
         }
     }
 }

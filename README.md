@@ -28,8 +28,43 @@ Var name casing doesn't matter.
 | ----------------- | ---------- | -------- | -------- | -------------------------------------------------------------------------------------------------- |
 | `CAR_SPEED`       | `kph`      | `float?` | `123.45` | The actual speed of the player's train car.<br />Null if not in a train car.                       |
 | `CAR_SPEEDOMETER` | `kph`      | `float?` | `123.45` | The speed displayed on the speedometer in the player's train car.<br />Null if not in a train car. |
-| `THROTTLE`        | `position` | `float?` | `0.363`  | The position of the throttle lever from 0 to 100%.                                                 |
-| `TRAIN_BRAKE`     | `position` | `float?` | `0.363`  | The position of the train brake lever from 0 to 100%.                                              |
+| `THROTTLE`        | `position` | `float?` | `0.123`  | The position of the throttle lever from 0 to 100%.                                                 |
+| `TRAIN_BRAKE`     | `position` | `float?` | `0.456`  | The position of the train brake lever from 0 to 100%.                                              |
+| `REVERSER`        | `position` | `float?` | `0.789`  | The position of the reverser lever from 0 to 100%.                                                 |
+
+### Ports
+
+You can also subscribe to a "standard port" var:
+
+| Name                               | Unit     | Type     | Example             | Description            |
+| ---------------------------------- | -------- | -------- | ------------------- | ---------------------- |
+| `PORT_WHEELSPEEDKMH`               | `number` |          |                     |
+| `PORT_TRACTIONMOTORAMPS`           | `number` |          |                     |
+| `PORT_TRACTIONMOTORAMPLIMIT`       | `number` |          |                     |
+| `PORT_TRACTIONMOTORAMPLIMITEFFECT` | `number` |          |                     |
+| `PORT_TEMPERATURE`                 | `number` |          |                     |
+| `PORT_TRACTIONMOTORAMPSMAX`        | `number` |          |                     |
+| `PORT_ENGINERPM`                   | `number` | `float?` | `6000` for 6000 RPM | The RPM of the engine. |
+| `PORT_ENGINERPMMAX`                | `number` |          |                     |
+| `PORT_TURBINERPM`                  | `number` |          |                     |
+| `PORT_TURBINERPMMAX`               | `number` |          |                     |
+| `PORT_FUEL`                        | `number` |          |                     |
+| `PORT_FUELMAX`                     | `number` |          |                     |
+| `PORT_OIL`                         | `number` |          |                     |
+| `PORT_OILMAX`                      | `number` |          |                     |
+| `PORT_SAND`                        | `number` |          |                     |
+| `PORT_SANDMAX`                     | `number` |          |                     |
+| `PORT_ENGINEON`                    | `number` |          |                     |
+| `PORT_FUELLAMPSTATE`               | `number` |          |                     |
+| `PORT_OILLAMPSTATE`                | `number` |          |                     |
+| `PORT_SANDLAMPSTATE`               | `number` |          |                     |
+| `PORT_SANDERLAMPSTATE`             | `number` |          |                     |
+| `PORT_WIPERSLAMPSTATE`             | `number` |          |                     |
+| `PORT_HEADLIGHTFLAMPSTATE`         | `number` |          |                     |
+| `PORT_HEADLIGHTRLAMPSTATE`         | `number` |          |                     |
+| `PORT_CABLIGHTLAMPSTATE`           | `number` |          |                     |
+| `PORT_ENGINERPMLAMPSTATE`          | `number` |          |                     |
+| `PORT_AMPSLAMPSTATE`               | `number` |          |                     |
 
 ## Events
 

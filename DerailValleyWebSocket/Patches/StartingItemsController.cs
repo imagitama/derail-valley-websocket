@@ -1,20 +1,22 @@
 ﻿using HarmonyLib;
+using UnityModManagerNet;
 
-namespace DerailValleyWebSocket; 
+namespace DerailValleyWebSocket;
 
 [HarmonyPatch(typeof(StartingItemsController), nameof(StartingItemsController.AddStartingItems))]
 internal class StartingItemsControllerPatch
 {
+    private static UnityModManager.ModEntry.ModLogger Logger => Main.ModEntry.Logger;
     public static void Postfix()
     {
-        Main.Logger.Logger.Log("StartingItemsController.AddStartingItems Postfix");
+        Logger.Log("StartingItemsController.AddStartingItems Postfix");
 
         PlayerManager.CarChanged += OnCarChanged;
 
         if (PlayerManager.Car == null)
-            Main.Logger.Logger.Log($"Initial car is null");
+            Logger.Log($"Initial car is null");
         else
-            Main.Logger.Logger.Log($"Initial car is '{CarHelper.GetCurrentCarName()}'");
+            Logger.Log($"Initial car is '{CarHelper.GetCurrentCarName()}'");
 
         OnCarChanged(PlayerManager.Car);
     }
@@ -23,7 +25,7 @@ internal class StartingItemsControllerPatch
     {
         if (newCar == null)
         {
-            Main.Logger.Logger.Log($"Car changed => null");
+            Logger.Log($"Car changed => null");
 
             Main.Server.BroadcastEvent("CAR_NAME_CHANGED", null);
             return;
@@ -31,7 +33,7 @@ internal class StartingItemsControllerPatch
 
         var newName = CarHelper.GetCurrentCarName();
 
-        Main.Logger.Logger.Log($"Car changed => '{newName}'");
+        Logger.Log($"Car changed => '{newName}'");
 
         Main.Server.BroadcastEvent("CAR_NAME_CHANGED", newName);
     }
