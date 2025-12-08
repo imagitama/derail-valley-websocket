@@ -27,7 +27,7 @@ internal class StartingItemsControllerPatch
         {
             Logger.Log($"Car changed => null");
 
-            Main.Server.BroadcastEvent("CAR_NAME_CHANGED", null);
+            Main.server.BroadcastEvent("CAR_NAME_CHANGED", null);
             return;
         }
 
@@ -35,6 +35,6 @@ internal class StartingItemsControllerPatch
 
         Logger.Log($"Car changed => '{newName}'");
 
-        Main.Server.BroadcastEvent("CAR_NAME_CHANGED", newName);
+        Main.server.BroadcastEvent("CAR_NAME_CHANGED", newName);
     }
 }

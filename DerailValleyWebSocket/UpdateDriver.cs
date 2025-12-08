@@ -7,6 +7,8 @@ namespace DerailValleyWebSocket;
 public class UpdateDriver : MonoBehaviour
 {
     private static UnityModManager.ModEntry.ModLogger Logger => Main.ModEntry.Logger;
+    private float _elapsed;
+
     void Start()
     {
         Logger.Log($"UpdateDriver started");
@@ -14,18 +16,31 @@ public class UpdateDriver : MonoBehaviour
 
     void Update()
     {
+        _elapsed += Time.deltaTime;
+        if (_elapsed < Main.settings.Rate)
+            return;
+
+        _elapsed = 0f;  // reset timer
+
         try
         {
             var values = VarSystem.FetchAll();
 
-            foreach (var kv in values)
+            // TODO: allow to configure per var?
+            if (Main.settings.EmitEachVar)
             {
-                var (VarName, Unit) = kv.Key;
+                foreach (var kv in values)
+                {
+                    var (VarName, Unit) = kv.Key;
 
-                // Logger.Log($"Fetch varName={VarName} unit={Unit} value={kv.Value}");
+                    // Logger.Log($"Fetch varName={VarName} unit={Unit} value={kv.Value}");
 
-                // TODO: broadcast ALL vars once for performance
-                Main.Server.BroadcastVar(VarName, Unit, kv.Value);
+                    Main.server.BroadcastVar(VarName, Unit, kv.Value);
+                }
+            }
+            else
+            {
+                Main.server.BroadcastVars(values);
             }
         }
         catch (Exception ex)

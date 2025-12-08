@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -70,7 +71,7 @@ public class WebsocketServer
                     _clients[clientId].SubscribedVars = new HashSet<(string, string)>();
 
                     // TODO: Only do this if names don't match
-                    Broadcast<InitPayload>(
+                    Broadcast(
                         MessageType.Init,
                         new InitPayload
                         {
@@ -109,7 +110,7 @@ public class WebsocketServer
         {
             Logger.Log($"Failed to handle message: {ex}");
 
-            Broadcast<ErrorPayload>(
+            Broadcast(
                 MessageType.Error,
                 new ErrorPayload
                 {
@@ -121,12 +122,26 @@ public class WebsocketServer
 
     public void BroadcastVar(string name, string unit, object value)
     {
-        Broadcast<VarPayload>(MessageType.Var, new VarPayload { Name = name, Unit = unit, Value = value });
+        Broadcast(MessageType.Var, new VarPayload { Name = name, Unit = unit, Value = value });
+    }
+
+    public VarsPayload ConvertValuesIntoVarsPayload(Dictionary<(string name, string unit), object> values)
+    {
+        var vars = values.Select(x => new VarPayload() { Name = x.Key.name, Unit = x.Key.unit, Value = x.Value }).ToList();
+
+        var payload = new VarsPayload() { Vars = vars };
+
+        return payload;
+    }
+
+    public void BroadcastVars(Dictionary<(string, string), object> values)
+    {
+        Broadcast(MessageType.Vars, ConvertValuesIntoVarsPayload(values));
     }
 
     public void BroadcastEvent(string name, object value)
     {
-        Broadcast<EventPayload>(MessageType.Event, new EventPayload { Name = name, Value = value });
+        Broadcast(MessageType.Event, new EventPayload { Name = name, Value = value });
     }
 
     public void Broadcast<TPayload>(MessageType type, TPayload payload)

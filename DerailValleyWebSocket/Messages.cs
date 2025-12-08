@@ -1,9 +1,12 @@
+using System.Collections.Generic;
+
 namespace DerailValleyWebSocket;
 
 public enum MessageType
 {
     Init,
     Var,
+    Vars,
     Event,
     SubscribeToVar,
     SubscribeToEvent,
@@ -18,7 +21,7 @@ public class Message<TPayload>
     public TPayload Payload { get; set; }
 }
 
-public class Payload {}
+public class Payload { }
 
 public class InitPayload : Payload
 {
@@ -41,6 +44,11 @@ public class VarPayload : Payload
     public string Name;
     public string Unit;
     public object Value;
+}
+
+public class VarsPayload : Payload
+{
+    public List<VarPayload> Vars;
 }
 
 public class EventPayload : Payload

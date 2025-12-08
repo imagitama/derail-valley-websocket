@@ -12,8 +12,8 @@ namespace DerailValleyWebSocket;
 public static class Main
 {
     public static UnityModManager.ModEntry ModEntry;
-    public static WebsocketServer Server;
-    public static Settings Settings;
+    public static WebsocketServer server;
+    public static Settings settings;
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
@@ -22,7 +22,7 @@ public static class Main
         Harmony? harmony = null;
         try
         {
-            Settings = Settings.Load<Settings>(modEntry);
+            settings = Settings.Load<Settings>(modEntry);
 
             modEntry.OnGUI = OnGUI;
             modEntry.OnSaveGUI = OnSaveGUI;
@@ -35,8 +35,8 @@ public static class Main
             go.AddComponent<UpdateDriver>();
 
             // TODO: restart on port change
-            Server = new WebsocketServer(Settings.Port);
-            Server.Start();
+            server = new WebsocketServer(settings.Port);
+            server.Start();
 
             ModEntry.Logger.Log("DerailValleyWebSocket started");
         }
@@ -53,21 +53,17 @@ public static class Main
 
     private static void OnGUI(UnityModManager.ModEntry modEntry)
     {
-        GUILayout.Label("Mod Settings", UnityEngine.GUI.skin.label);
-
-        Settings.Port = int.Parse(
-            GUILayout.TextField(Settings.Port.ToString())
-        );
+        settings.Draw(modEntry);
     }
 
     private static void OnSaveGUI(UnityModManager.ModEntry modEntry)
     {
-        Settings.Save(modEntry);
+        settings.Save(modEntry);
     }
 
     private static bool Unload(UnityModManager.ModEntry entry)
     {
-        Server?.Stop();
+        server?.Stop();
         ModEntry.Logger.Log("DerailValleyWebSocket stopped");
         return true;
     }

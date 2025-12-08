@@ -1,3 +1,8 @@
+# 1.4.0
+
+- replaced individual var messages with a single one for performance
+- added `Rate` setting to slow down emission (default is 20hz)
+
 # 1.3.0
 
 - added standard simport support:\
